@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Apprentice;
+use App\Models\Contract;
+use App\Models\User_register;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class ApprenticeController extends Controller
 {
@@ -92,4 +96,52 @@ class ApprenticeController extends Controller
         $apprentice->delete();
         return response()->json(null, 204); // Respuesta vacía con código 204
     }
+
+
+
+
+
+    public function asignarInstructorAprendiz(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $user = User_register::create([
+                'identification' => $request->identification,
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'telephone' => $request->telephone,
+                'email' => $request->email,
+                'address' => $request->address,
+                'department' => $request->department,
+                'municipality' => $request->municipality,
+                'password' => bcrypt('aprendiz'), 
+                'id_role' => 4, 
+            ]);
+    
+            $contract = Contract::create([
+                'code' => rand(1000, 9999), 
+                'type' => 'default', 
+                'start_date' => now(),
+                'end_date' => now()->addYear(),
+                'id_company' => $request->id_company, 
+            ]);
+    
+            Apprentice::create([
+                'academic_level' => $request->academic_level,
+                'program' => $request->program,
+                'ficha' => $request->ficha,
+                'id_user_register' => $user->id,
+                'id_contract' => $contract->id,
+                'id_trainer' => $request->id_trainer,
+            ]);
+    
+            DB::commit();
+    
+            return response()->json(['message' => 'Aprendiz registrado exitosamente.'], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Ocurrió un error al registrar el aprendiz: ' . $e->getMessage()], 500);
+        }
+    }
+    
 }

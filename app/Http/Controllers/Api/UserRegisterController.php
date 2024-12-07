@@ -136,7 +136,16 @@ class UserRegisterController extends Controller
 
     public function getUserRegistersByRolesInstructor()
     {
-        $users = User_register::whereIn('id_role', [3, 4])->with('Role')->get();
+        $users = User_register::whereIn('id_role', [3 ])->with('Role')->get();
+        return response()->json($users);
+    }
+
+
+
+    
+    public function getUserRegistersByAprendiz()
+    {
+        $users = User_register::whereIn('id_role', [4])->with('Role')->get();
         return response()->json($users);
     }
 }

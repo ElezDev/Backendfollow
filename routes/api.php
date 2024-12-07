@@ -116,3 +116,9 @@ Route::get('/departamentos', [DepartmentController::class, 'index']);
 
 Route::get('user_by_roles', action: [UserRegisterController::class, 'getUserRegistersByRoles']);
 Route::get('user_by_roles_instructor', action: [UserRegisterController::class, 'getUserRegistersByRolesInstructor']);
+
+Route::get('user_by_roles_aprendiz', action: [UserRegisterController::class, 'getUserRegistersByAprendiz']);
+
+Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
+
+Route::get('getCompany', action: [CompanyController::class, 'getCompany']);
