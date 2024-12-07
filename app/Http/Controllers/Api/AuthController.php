@@ -77,8 +77,6 @@ class AuthController extends Controller
         try {
             // Intentar obtener el token con las credenciales
             if (!$token = JWTAuth::attempt($credentials)) {
-
-                var_dump($token);
                 // Si el token no es generado, devolver error 401
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
