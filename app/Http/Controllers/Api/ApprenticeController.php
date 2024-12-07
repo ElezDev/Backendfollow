@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Apprentice;
 use App\Models\Contract;
 use App\Models\User;
-use App\Models\User_register;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 
 class ApprenticeController extends Controller
 {
@@ -23,7 +22,6 @@ class ApprenticeController extends Controller
         }
 
         return response()->json($apprentices->get());
-
     }
 
     /**
@@ -98,10 +96,6 @@ class ApprenticeController extends Controller
         return response()->json(null, 204); // Respuesta vacía con código 204
     }
 
-
-
-
-
     public function asignarInstructorAprendiz(Request $request)
     {
         DB::beginTransaction();
@@ -115,18 +109,18 @@ class ApprenticeController extends Controller
                 'address' => $request->address,
                 'department' => $request->department,
                 'municipality' => $request->municipality,
-                'password' => bcrypt('aprendiz'), 
-                'id_role' => 4, 
+                'password' => bcrypt('aprendiz'),
+                'id_role' => 4,
             ]);
-    
+
             $contract = Contract::create([
-                'code' => rand(1000, 9999), 
-                'type' => 'default', 
+                'code' => rand(1000, 9999),
+                'type' => 'default',
                 'start_date' => now(),
                 'end_date' => now()->addYear(),
-                'id_company' => $request->id_company, 
+                'id_company' => $request->id_company,
             ]);
-    
+
             Apprentice::create([
                 'academic_level' => $request->academic_level,
                 'program' => $request->program,
@@ -135,14 +129,38 @@ class ApprenticeController extends Controller
                 'id_contract' => $contract->id,
                 'id_trainer' => $request->id_trainer,
             ]);
-    
+
             DB::commit();
-    
+
             return response()->json(['message' => 'Aprendiz registrado exitosamente.'], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'Ocurrió un error al registrar el aprendiz: ' . $e->getMessage()], 500);
         }
     }
-    
+
+    /**
+     * Get last trainer assigned to apprentice
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTrainerByApprentice(): JsonResponse
+    {
+        // Obtener el usuario autenticado
+        $user = auth('api')->user();
+
+        // Verificar si el usuario está autenticado
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Buscar el último aprendiz relacionado con el usuario autenticado
+        $apprentice = Apprentice::where('user_id', $user->id)->latest('created_at')->first();
+
+        // Verificar si se encontró un aprendiz
+        if (!$apprentice) {
+            return response()->json(['message' => 'No apprentice found for this user.'], 404);
+        }
+
+        return response()->json($apprentice);
+    }
 }
