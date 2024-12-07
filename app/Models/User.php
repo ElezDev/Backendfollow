@@ -16,7 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
-    protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -109,12 +109,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(notification::class);
     }
 
-    // Encriptar la contraseña automáticamente al crear o actualizar
-    public function setPasswordAttribute($value): void
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
-
     public function scopeIncluded(Builder $query): void
     {
         if (empty($this->allowIncluded) || empty(request('included'))) {
@@ -193,5 +187,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasManyThrough(Apprentice::class, Trainer::class, 'user_id', 'id_trainer');
     }
-
 }
