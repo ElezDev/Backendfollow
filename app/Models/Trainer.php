@@ -41,10 +41,19 @@ class Trainer extends Model
         'user_id'
     ];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+  
+
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');  // Asumiendo que el entrenador tiene una relación con el usuario
+}
+
+    public function trainer()
+{
+    return $this->belongsTo(Trainer::class); // Assuming Apprentice belongs to Trainer
+}
+
+
 
     public function apprentices(): HasMany
     {

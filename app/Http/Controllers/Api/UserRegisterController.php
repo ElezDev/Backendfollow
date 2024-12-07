@@ -41,8 +41,13 @@ class UserRegisterController extends Controller
         'address' => 'required|string|max:255',
         'department' => 'required|string|max:255',
         'municipality' => 'required|string|max:255',
-        'password' => 'required|string|max:255',
+        'password' => 'nullable|string|max:255', // La contraseña no es requerida, se establecerá por defecto
         'id_role' => 'required|exists:roles,id',
+    ]);
+
+    // Asignar la contraseña por defecto 'sena' si no se proporciona
+    $request->merge([
+        'password' => $request->password ?? 'sena',
     ]);
 
     $user = User::create($request->all());
@@ -61,7 +66,7 @@ class UserRegisterController extends Controller
         $trainer = Trainer::create($trainerData);
     }
 
-    return response()->json($user, 201);
+    return response()->json($user, status: 201);
 }
 
 
@@ -130,9 +135,17 @@ class UserRegisterController extends Controller
 
     public function getUserRegistersByRolesInstructor()
     {
-        $users = User::whereIn('id_role', [3])->with('Role')->get();
+        $users = User::whereIn('id_role', [3])
+            ->with(['role', 'trainer', 'apprentices']) 
+            ->get()
+            ->map(function($user) {
+                $user->num_apprentices_assigned = $user->apprentices->count();
+                return $user;
+            });
+        
         return response()->json($users);
     }
+    
 
 
     public function getTrainer()
@@ -148,7 +161,15 @@ class UserRegisterController extends Controller
     
     public function getUserRegistersByAprendiz()
     {
-        $users = User::whereIn('id_role', [4])->with('role')->get();
+        $users = User::whereIn('id_role', [4])
+        ->with([
+            'role',
+            'apprentice.trainer.user'
+        ])
+        ->get();
+
+    
         return response()->json($users);
     }
+    
 }

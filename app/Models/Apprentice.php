@@ -20,9 +20,14 @@ class Apprentice extends Model
 
     protected $allowSort = ['id', 'academic_level', 'program', 'ficha', 'user_id', 'id_contract', 'id_trainer'];
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class, 'id_trainer');
     }
 
     public function contract(): BelongsTo
@@ -30,10 +35,6 @@ class Apprentice extends Model
         return $this->belongsTo(Contract::class);
     }
 
-    public function trainer(): BelongsTo
-    {
-        return $this->belongsTo(Trainer::class);
-    }
 
     public function logs(): HasMany
     {
@@ -96,4 +97,6 @@ class Apprentice extends Model
             }
         }
     }
+  
+    
 }

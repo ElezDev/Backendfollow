@@ -77,7 +77,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'id_role'
     ];
-    
+
     public function getJWTIdentifier(): mixed
     {
         return $this->getKey();
@@ -94,11 +94,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class, 'id_role');
     }
 
-    public function apprentices(): HasMany
+    public function apprentice()
     {
-        return $this->hasMany(Apprentice::class);
+        return $this->hasOne(Apprentice::class);  // Asumiendo que un usuario puede tener un solo aprendiz
     }
-
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
@@ -185,9 +184,18 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-    public function trainers()
+    public function trainer()
     {
         return $this->hasMany(Trainer::class, 'user_id');
     }
+
+
+
+    public function apprentices()
+    {
+        return $this->hasManyThrough(Apprentice::class, Trainer::class, 'user_id', 'id_trainer');
+    }
+
+
 
 }
