@@ -154,7 +154,7 @@ class ApprenticeController extends Controller
         }
 
         // Buscar el último aprendiz relacionado con el usuario autenticado
-        $apprentice = Apprentice::where('user_id', $user->id)->latest('created_at')->first();
+        $apprentice = Apprentice::with(['trainer.user'])->where('user_id', $user->id)->latest('created_at')->first();
 
         // Verificar si se encontró un aprendiz
         if (!$apprentice) {
