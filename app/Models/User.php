@@ -44,10 +44,10 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $allowIncluded = [
-        'Role',
-        'Apprentice',
-        'Message',
-        'Notification'
+        'role',
+        'apprentices',
+        'messages',
+        'notifications'
     ];
 
     protected $allowFilter = [
