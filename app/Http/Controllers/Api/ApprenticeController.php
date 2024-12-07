@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Apprentice;
 use App\Models\Contract;
+use App\Models\User;
 use App\Models\User_register;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -105,7 +106,7 @@ class ApprenticeController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user = User_register::create([
+            $user = User::create([
                 'identification' => $request->identification,
                 'name' => $request->name,
                 'last_name' => $request->last_name,
@@ -130,7 +131,7 @@ class ApprenticeController extends Controller
                 'academic_level' => $request->academic_level,
                 'program' => $request->program,
                 'ficha' => $request->ficha,
-                'id_user_register' => $user->id,
+                'user_id' => $user->id,
                 'id_contract' => $contract->id,
                 'id_trainer' => $request->id_trainer,
             ]);

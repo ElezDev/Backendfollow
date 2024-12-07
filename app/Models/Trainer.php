@@ -12,7 +12,7 @@ class Trainer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id'];
+    protected $guarded = [];
 
     protected $allowIncluded = [
         'users',

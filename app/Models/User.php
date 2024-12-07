@@ -16,7 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -43,12 +43,12 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    protected $allowIncluded = [
-        'Role',
-        'Apprentice',
-        'Message',
-        'Notification'
-    ];
+    // protected $allowIncluded = [
+    //     'Role',
+    //     'Apprentice',
+    //     'Message',
+    //     'Notification'
+    // ];
 
     protected $allowFilter = [
         'id',
@@ -182,6 +182,12 @@ class User extends Authenticatable implements JWTSubject
             }
         }
         return $query->get();
+    }
+
+
+    public function trainers()
+    {
+        return $this->hasMany(Trainer::class, 'user_id');
     }
 
 }

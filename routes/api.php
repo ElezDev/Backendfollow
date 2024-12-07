@@ -94,11 +94,7 @@ Route::put('user_registers/{user_register}', [UserRegisterController::class, 'up
 Route::delete('user_registers/{user_register}', [UserRegisterController::class, 'destroy'])->name('api.user_register.delete');
 
 
-// Route::get('user_registers', [UserRegisterController::class, 'index'])->name('api.user_registers.index');
-// Route::post('user_registers', [UserRegisterController::class, 'store'])->name('api.user_registers.store');
-// Route::get('user_registers/{user_register}', [UserRegisterController::class, 'show'])->name('api.user_registers.show');
-// Route::put('user_registers/{user_register}', [UserRegisterController::class, 'update'])->name('api.user_registers.update');
-// Route::delete('user_registers/{user_register}', [UserRegisterController::class, 'destroy'])->name('api.user_registers.delete');
+
 
 // Rutas para Contracts
 Route::get('contracts', [ContractController::class,'index'])->name('api.contracts.index');
@@ -113,7 +109,10 @@ Route::get('user_by_roles', action: [UserRegisterController::class, 'getUserRegi
 Route::get('user_by_roles_instructor', action: [UserRegisterController::class, 'getUserRegistersByRolesInstructor']);
 
 Route::get('user_by_roles_aprendiz', action: [UserRegisterController::class, 'getUserRegistersByAprendiz']);
+Route::get('get_trainer', action: [UserRegisterController::class, 'getTrainer']);
 
 Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
+
+
 
 Route::get('getCompany', action: [CompanyController::class, 'getCompany']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,24 +27,43 @@ class UserRegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'identification' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'telephone' => 'required|integer',
-            'email' => 'required|email|max:255|unique:users',
-            'address' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
-            'municipality' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'id_role' => 'required|exists:roles,id',
-        ]);
 
-        $userRegister = User::create($request->all());
-        return response()->json($userRegister, status: 201);
+
+    public function store(Request $request)
+{
+    
+    $request->validate([
+        'identification' => 'required|integer',
+        'name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'telephone' => 'required|integer',
+        'email' => 'required|email|max:255|unique:users',
+        'address' => 'required|string|max:255',
+        'department' => 'required|string|max:255',
+        'municipality' => 'required|string|max:255',
+        'password' => 'required|string|max:255',
+        'id_role' => 'required|exists:roles,id',
+    ]);
+
+    $user = User::create($request->all());
+
+    if ($request->id_role == 3) {
+        $trainerData = [
+            'number_of_monitoring_hours' => 1,
+            'month' => now(), 
+            'number_of_trainees_assigned' => 0, 
+            'network_knowledge' => 'Basic', 
+            'start_date' => now(),
+            'end_date' => now()->addMonth(), 
+            'user_id' => $user->id, 
+        ];
+
+        $trainer = Trainer::create($trainerData);
     }
+
+    return response()->json($user, 201);
+}
+
 
     /**
      * Display the specified resource.
@@ -115,11 +135,20 @@ class UserRegisterController extends Controller
     }
 
 
+    public function getTrainer()
+    {
+        $users = User::whereIn('id_role', [3])
+                     ->with('trainers', 'Role')  
+                     ->get();
+    
+        return response()->json($users);
+    }
+    
 
     
     public function getUserRegistersByAprendiz()
     {
-        $users = User::whereIn('id_role', [4])->with('Role')->get();
+        $users = User::whereIn('id_role', [4])->with('role')->get();
         return response()->json($users);
     }
 }
