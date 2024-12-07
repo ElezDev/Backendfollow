@@ -41,6 +41,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     protected $allowIncluded = [
@@ -77,7 +78,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'id_role'
     ];
-    
+
     public function getJWTIdentifier(): mixed
     {
         return $this->getKey();
@@ -183,5 +184,4 @@ class User extends Authenticatable implements JWTSubject
         }
         return $query->get();
     }
-
 }
