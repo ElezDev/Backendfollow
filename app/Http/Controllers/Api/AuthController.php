@@ -29,29 +29,32 @@ class AuthController extends Controller
         return response()->json($user, 201);
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(): JsonResponse
     {
 
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-
-        $credentials = $request->only('email', 'password');
-
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Could not create token'], 500);
+        if (!$token = auth('api')->attempt([
+            "email"     => request()->email,
+            "password"  => request()->password,
+        ])) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
+        return response()->json(['token' => $token]);
 
-        return response()->json(compact('token'));
+        // return $this->respondWithToken($token);
     }
 
     public function getUser(Request $request): JsonResponse
     {
         return response()->json($request->user());
+    }
+
+    protected function respondWithToken($token): JsonResponse
+    {
+        $user = auth('api')->user();
+        return response()->json([
+            'access_token' => $token,
+            'token_type'   => 'bearer',
+            'user'         => $this->getDataUser()
+        ]);
     }
 }
