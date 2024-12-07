@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("message");
             $table->string("description");
-            $table->foreignId('id_user_register')->references('id')->on('user_registers')->onDelete('cascade');
+            // $table->foreignId('id_user_register')->references('id')->on('user_registers')->onDelete('cascade');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

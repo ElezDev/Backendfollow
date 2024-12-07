@@ -2,33 +2,43 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Apprentice extends Model
 {
     use HasFactory;
-    public function User_register(){
-        return $this->belongsTo('App\Models\User_register');
-    }
-    public function Contract(){
-        return $this->belongsTo('App\Models\Contract');
-    }
-    public function Trainer(){
-        return $this->belongsTo('App\Models\Trainer');
-    }
-    public function Log(){
-        return $this->hasMany('App\Models\Log');
+
+    protected $guarded = ['id'];
+
+    protected $allowIncluded = ['users', 'Contract', 'Trainer', 'Log'];
+
+    protected $allowFilter = ['id', 'academic_level', 'program', 'ficha', 'user_id', 'id_contract', 'id_trainer'];
+
+    protected $allowSort = ['id', 'academic_level', 'program', 'ficha', 'user_id', 'id_contract', 'id_trainer'];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
-    protected $fillable = ['id', 'academic_level', 'program', 'ficha', 'id_user_register', 'id_contract','id_trainer'];
+    public function contract(): BelongsTo
+    {
+        return $this->belongsTo(Contract::class);
+    }
 
-    protected $allowIncluded = ['User_register', 'Contract', 'Trainer','Log'];
+    public function trainer(): BelongsTo
+    {
+        return $this->belongsTo(Trainer::class);
+    }
 
-    protected $allowFilter = ['id', 'academic_level', 'program', 'ficha', 'id_user_register', 'id_contract','id_trainer'];
-
-    protected $allowSort = ['id', 'academic_level', 'program', 'ficha', 'id_user_register', 'id_contract','id_trainer'];
+    public function logs(): HasMany
+    {
+        return $this->hasMany(Log::class);
+    }
 
     public function scopeIncluded(Builder $query)
     {
@@ -87,5 +97,3 @@ class Apprentice extends Model
         }
     }
 }
-
-

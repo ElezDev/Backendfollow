@@ -38,7 +38,7 @@ class NotificationController extends Controller
         $request->validate([
             'shipping_date' => 'required|date',
             'content' => 'required|string|max:255',
-            'id_user_register' => 'required|exists:user_registers,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         // Creación del nuevo contrato
@@ -74,7 +74,7 @@ class NotificationController extends Controller
         $request->validate([
             'shipping_date' => 'required|date',
             'content' => 'required|string|max:255',
-            'id_user_register' => 'required|exists:user_registers,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         // Actualización del contrato

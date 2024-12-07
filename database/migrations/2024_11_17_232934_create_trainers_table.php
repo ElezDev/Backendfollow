@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('network_knowledge');
             $table->date('start_date');
             $table->date('end_date');
-            $table->foreignId('id_user_register')->references('id')->on('user_registers');
+            // $table->foreignId('id_user_register')->references('id')->on('user_registers');
+            $table->foreignId('user_id')->references('id')->on('users');
 
             $table->timestamps();
         });

@@ -2,34 +2,66 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Trainer extends Model
 {
     use HasFactory;
 
-    public function User_Register(){
-        return $this->belongsTo(User_register::class, 'id_user_resgisters');
-    }
-    public function Apprentice(){
-        return $this->hasMany('App\Models\Apprentice');
-    }
-    public function Followup(){
-        return $this->hasMany('App\Models\Followup');
-    }
-    public function Log(){
-        return $this->hasMany('App\Models\Log');
+    protected $fillable = ['id'];
+
+    protected $allowIncluded = [
+        'users',
+        'Apprentice',
+        'Followup',
+        'Log'
+    ];
+    protected $allowFilter = [
+        'id',
+        'number_of_monitoring_hours',
+        'month',
+        'number_of_trainees_assigned',
+        'network_knowledge',
+        'start_date',
+        'end_date',
+        'user_id'
+    ];
+    protected $allowSort = [
+        'id',
+        'number_of_monitoring_hours',
+        'month',
+        'number_of_trainees_assigned',
+        'network_knowledge',
+        'start_date',
+        'end_date',
+        'user_id'
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    protected $fillable = ['number_of_monitoring_hours', 'month', 'number_of_trainees_assigned','network_knowledge','start_date','end_date', 'id_user_register'];
+    public function apprentices(): HasMany
+    {
+        return $this->hasMany(Apprentice::class);
+    }
 
-    protected $allowIncluded = ['User_Register','Apprentice','Followup','Log'];
-    protected $allowFilter = ['id', 'number_of_monitoring_hours', 'month', 'number_of_trainees_assigned','network_knowledge','start_date','end_date', 'id_user_register'];
-    protected $allowSort = ['id', 'number_of_monitoring_hours', 'month', 'number_of_trainees_assigned','network_knowledge','start_date','end_date', 'id_user_register'];
+    public function followUps(): HasMany
+    {
+        return $this->hasMany(Followup::class);
+    }
 
-    public function scopeIncluded(Builder $query)
+    public function logs(): HasMany
+    {
+        return $this->hasMany(Log::class);
+    }
+
+    public function scopeIncluded(Builder $query): void
     {
         if (empty($this->allowIncluded) || empty(request('included'))) {
             return;
@@ -47,7 +79,7 @@ class Trainer extends Model
         $query->with($relations);
     }
 
-    public function scopeFilter(Builder $query)
+    public function scopeFilter(Builder $query): void
     {
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
@@ -63,7 +95,7 @@ class Trainer extends Model
         }
     }
 
-    public function scopeSort(Builder $query)
+    public function scopeSort(Builder $query): void
     {
         if (empty($this->allowSort) || empty(request('sort'))) {
             return;

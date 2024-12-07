@@ -3,38 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User_register;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserRegisterController extends Controller
 {
-
-    //administrador
-
-    public function AgregarAprendiz()
-    {
-        return view('administrator.Agregar-aprendiz');
-    }
-    public function AgregarInstructor()
-    {
-        return view('administrator.Agregar-instructor');
-    }
-
-    //super administardor
-
-    public function SuperAdminAdministratorAñadir()
-    {
-        return view('superadmin.SuperAdmin-AdministratorAñadir');
-    }
-    public function SuperAdminAprendizAgregar()
-    {
-        return view('superadmin.SuperAdmin-AprendizAgregar');
-    }
-    public function SuperAdminInstructorAñadir()
-    {
-        return view('superadmin.SuperAdmin-InstructorAñadir');
-    }
-    
     /**
      * Display a listing of the resource.
      *
@@ -43,7 +16,7 @@ class UserRegisterController extends Controller
     public function index()
     {
         // Recupera todos los registros de usuario
-        $userRegisters = User_register::with('Role')->get();
+        $userRegisters = User::with('Role')->get();
         return response()->json($userRegisters);
     }
 
@@ -60,7 +33,7 @@ class UserRegisterController extends Controller
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'telephone' => 'required|integer',
-            'email' => 'required|email|max:255|unique:user_registers',
+            'email' => 'required|email|max:255|unique:users',
             'address' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'municipality' => 'required|string|max:255',
@@ -68,8 +41,8 @@ class UserRegisterController extends Controller
             'id_role' => 'required|exists:roles,id',
         ]);
 
-        $userRegister = User_register::create($request->all());
-        return response()->json($userRegister, status: 201); 
+        $userRegister = User::create($request->all());
+        return response()->json($userRegister, status: 201);
     }
 
     /**
@@ -81,7 +54,7 @@ class UserRegisterController extends Controller
     public function show($id)
     {
         // Recupera un registro de usuario específico
-        $userRegister = User_register::findOrFail($id);
+        $userRegister = User::findOrFail($id);
 
         return response()->json($userRegister);
     }
@@ -90,10 +63,10 @@ class UserRegisterController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User_register  $user_register
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, User_register $user_register)
+    public function update(Request $request, User $user)
     {
         // Validación de los datos de entrada
         $request->validate([
@@ -101,7 +74,7 @@ class UserRegisterController extends Controller
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'telephone' => 'required|integer',
-            'email' => 'required|email|max:255|unique:user_registers',
+            'email' => 'required|email|max:255|unique:users',
             'address' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'municipality' => 'required|string|max:255',
@@ -110,33 +83,34 @@ class UserRegisterController extends Controller
         ]);
 
         // Actualización del registro de usuario
-        $user_register->update($request->all());
+        $user->update($request->all());
 
-        return response()->json($user_register);
+        return response()->json($user);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User_register  $user_register
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(User_register $user_register)
+    public function destroy(User $user)
     {
         // Elimina el registro de usuario
-        $user_register->delete();
+        $user->delete();
 
         return response()->json(null, 204); // Respuesta vacía con código 204
     }
-      public function getUserRegistersByRoles()
+
+    public function getUserRegistersByRoles()
     {
-        $users = User_register::whereIn('id_role', [1, 2])->with('Role')->get();
+        $users = User::whereIn('id_role', [1, 2])->with('Role')->get();
         return response()->json($users);
     }
 
     public function getUserRegistersByRolesInstructor()
     {
-        $users = User_register::whereIn('id_role', [3 ])->with('Role')->get();
+        $users = User::whereIn('id_role', [3])->with('Role')->get();
         return response()->json($users);
     }
 
@@ -145,7 +119,7 @@ class UserRegisterController extends Controller
     
     public function getUserRegistersByAprendiz()
     {
-        $users = User_register::whereIn('id_role', [4])->with('Role')->get();
+        $users = User::whereIn('id_role', [4])->with('Role')->get();
         return response()->json($users);
     }
 }

@@ -1,18 +1,19 @@
 <?php  
 
-use App\Http\Controllers\Api\ApprenticeController;
-use App\Http\Controllers\Api\CompanyController;
-use App\Http\Controllers\Api\ContractController;
-use App\Http\Controllers\Api\FollowupController;
-use App\Http\Controllers\Api\MessageController;
-use App\Http\Controllers\Api\NotificationController;
-use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\LogController;
-use App\Http\Controllers\Api\TrainerController;
-use App\Http\Controllers\Api\UserRegisterController;
-use App\Http\Controllers\Api\DepartmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\LogController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\TrainerController;
+use App\Http\Controllers\Api\ContractController;
+use App\Http\Controllers\Api\FollowupController;
+use App\Http\Controllers\Api\ApprenticeController;
+use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\UserRegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,15 +25,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::get('/', function(){
-    return view('welcome');
-});
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::middleware('auth:api')->get('/user', [AuthController::class, 'getUser']);
 
 // Rutas para apprentice
 Route::get('apprentices', [ApprenticeController::class,'index'])->name('api.apprentices.index');

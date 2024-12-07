@@ -9,27 +9,26 @@ use Illuminate\Database\Eloquent\Builder;
 class notification extends Model
 {
     use HasFactory;
-    public function User_register(){
-        return $this->belongsTo('App\Models\User_register');
 
-    }
+    protected $guarded = ['id'];
 
+    protected $allowIncluded = ['users'];
 
-    protected $fillable = [
+    protected $allowFilter = [
+        'id',
         'shipping_date',
-        'content', 
-        'id_user_register'
+        'content',
+        'user_id'
     ];
 
-    protected $allowIncluded = ['User_register'];
-    protected $allowFilter = ['id','shipping_date',
-        'content', 
-        'id_user_register'];
-    protected $allowSort = ['id','shipping_date',
-        'content', 
-        'id_user_register'];
+    protected $allowSort = [
+        'id',
+        'shipping_date',
+        'content',
+        'user_id'
+    ];
 
-    public function scopeIncluded(Builder $query)
+    public function scopeIncluded(Builder $query): void
     {
         if (empty($this->allowIncluded) || empty(request('included'))) {
             return;
@@ -46,8 +45,7 @@ class notification extends Model
 
         $query->with($relations);
     }
-
-    public function scopeFilter(Builder $query)
+    public function scopeFilter(Builder $query): void
     {
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
@@ -63,7 +61,7 @@ class notification extends Model
         }
     }
 
-    public function scopeSort(Builder $query)
+    public function scopeSort(Builder $query): void
     {
         if (empty($this->allowSort) || empty(request('sort'))) {
             return;
@@ -98,4 +96,3 @@ class notification extends Model
         return $query->get();
     }
 }
-

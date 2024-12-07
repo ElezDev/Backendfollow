@@ -4,27 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Role extends Model
 {
 
-    public function User_register(){
-        return $this->hasOne('App\Models\User_register');
-
-}
-
-
     protected $fillable = ['role_type'];
 
-    protected $allowIncluded = ['User_register'];
+    protected $allowIncluded = ['users'];
 
     protected $allowFilter = ['id', 'role_type'];
 
     protected $allowSort = ['id', 'role_type'];
-    
-    
 
-    public function scopeIncluded(Builder $query)
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
+    }
+
+    public function scopeIncluded(Builder $query): void
     {
         if (empty($this->allowIncluded) || empty(request('included'))) {
             return;
@@ -42,7 +41,7 @@ class Role extends Model
         $query->with($relations);
     }
 
-    public function scopeFilter(Builder $query)
+    public function scopeFilter(Builder $query): void
     {
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
@@ -58,7 +57,7 @@ class Role extends Model
         }
     }
 
-    public function scopeSort(Builder $query)
+    public function scopeSort(Builder $query): void
     {
         if (empty($this->allowSort) || empty(request('sort'))) {
             return;
@@ -81,7 +80,8 @@ class Role extends Model
         }
     }
 
-    public function scopeGetOrPaginate(Builder $query) {
+    public function scopeGetOrPaginate(Builder $query)
+    {
         if (request('perPage')) {
             $perPage = intval(request('perPage'));
 

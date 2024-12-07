@@ -38,7 +38,7 @@ class ApprenticeController extends Controller
             'academic_level' => 'required|max:255',
             'program' => 'required|max:255',
             'ficha' => 'required|max:255',
-            'id_user_register' => 'required|exists:user_registers,id',
+            'user_id' => 'required|exists:users,id',
             'id_contract' => 'required|exists:contracts,id',
             'id_trainer' => 'required|exists:trainers,id', // Cambiado a followup_id
         ]);
@@ -74,7 +74,7 @@ class ApprenticeController extends Controller
             'academic_level' => 'required|max:255',
             'program' => 'required|max:255',
             'ficha' => 'required|max:255',
-            'id_user_register' => 'required|exists:user_registers,id',
+            'user_id' => 'required|exists:users,id',
             'id_contract' => 'required|exists:contracts,id',
             'id_trainer' => 'required|exists:trainers,id', // Cambiado a followup_id
         ]);

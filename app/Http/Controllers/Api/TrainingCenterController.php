@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\TrainingCenter;
+use App\Models\Trainer;
 use Illuminate\Http\Request;
 
 class TrainingCenterController extends Controller
@@ -11,10 +11,7 @@ class TrainingCenterController extends Controller
     //
     public function index()
     {
-
-        // $trainingCenter = TrainingCenter::all();
-        $trainingCenter = TrainingCenter::included()->filter()->get();
-
+        $trainingCenter = Trainer::included()->filter()->get();
         return response()->json($trainingCenter);
     }
 
@@ -29,11 +26,9 @@ class TrainingCenterController extends Controller
 
         $request->validate([
             'name' => 'required|max:100',
-            
-
         ]);
 
-        $trainingCenter = TrainingCenter::create($request->all());
+        $trainingCenter = Trainer::create($request->all());
 
         return response()->json($trainingCenter);
     }
@@ -46,7 +41,7 @@ class TrainingCenterController extends Controller
      */
     public function show($id) //si se pasa $id se utiliza la comentada
     {
-        $trainingCenter = TrainingCenter::included()->findOrFail($id);
+        $trainingCenter = Trainer::included()->findOrFail($id);
         return response()->json($trainingCenter);
     }
 
@@ -54,10 +49,10 @@ class TrainingCenterController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TrainingCenter
+     * @param  \App\Models\Trainer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TrainingCenter $trainingCenter)
+    public function update(Request $request, Trainer $trainingCenter)
     {
         $request->validate([
             'name' => 'required|max:100',
@@ -71,10 +66,10 @@ class TrainingCenterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TrainingCenter
+     * @param  \App\Models\Trainer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TrainingCenter $trainingCenter)
+    public function destroy(Trainer $trainingCenter)
     {
         $trainingCenter->delete();
         return response()->json($trainingCenter);
