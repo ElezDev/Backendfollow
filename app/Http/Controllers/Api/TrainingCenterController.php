@@ -36,7 +36,6 @@ class TrainingCenterController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Tipo_Transaccion  
      * @return \Illuminate\Http\Response
      */
     public function show($id) //si se pasa $id se utiliza la comentada

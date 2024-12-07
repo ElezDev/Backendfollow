@@ -16,7 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -95,11 +95,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class, 'id_role');
     }
 
-    public function apprentices(): HasMany
+    public function apprentice()
     {
-        return $this->hasMany(Apprentice::class);
+        return $this->hasOne(Apprentice::class);  // Asumiendo que un usuario puede tener un solo aprendiz
     }
-
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
@@ -184,4 +183,15 @@ class User extends Authenticatable implements JWTSubject
         }
         return $query->get();
     }
+
+    public function trainer()
+    {
+        return $this->hasMany(Trainer::class, 'user_id');
+    }
+
+    public function apprentices()
+    {
+        return $this->hasManyThrough(Apprentice::class, Trainer::class, 'user_id', 'id_trainer');
+    }
+
 }

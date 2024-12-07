@@ -60,4 +60,10 @@ class CompanyController extends Controller
         $company->delete();
         return response()->json(null, 204);
     }
+
+
+    public function getCompany(){
+        $companies = Company::all();
+        return response()->json($companies);
+    }
 }
