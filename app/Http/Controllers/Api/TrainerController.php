@@ -43,8 +43,7 @@ class TrainerController extends Controller
             'network_knowledge' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
-            'id_user_register' => 'required|exists:user_registers,id',
-            
+            'user_id' => 'required|exists:users,id',
         ]);
 
         // Creación del nuevo contrato
@@ -84,8 +83,7 @@ class TrainerController extends Controller
             'network_knowledge' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
-            'id_user_register' => 'required|exists:user_registers,id',
-            
+            'user_id' => 'required|exists:users,id',
         ]);
 
         // Actualización del contrato

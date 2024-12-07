@@ -16,8 +16,7 @@ return new class extends Migration
             $table->date("shipping_date");
             $table->string("content");
             $table->timestamps();
-            $table->foreignId('id_user_register')->references('id')->on('user_registers')->onDelete('cascade');
-
+            $table->foreignId('user_id')->references('id')->on('users');
         });
     }
 
