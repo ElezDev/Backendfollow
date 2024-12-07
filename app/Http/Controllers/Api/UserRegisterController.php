@@ -151,7 +151,7 @@ class UserRegisterController extends Controller
     public function getTrainer()
     {
         $users = User::whereIn('id_role', [3])
-                     ->with('trainers', 'Role')  
+                     ->with('trainer', 'Role')  
                      ->get();
     
         return response()->json($users);
