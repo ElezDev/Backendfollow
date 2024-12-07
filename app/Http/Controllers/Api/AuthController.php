@@ -7,37 +7,86 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     public function register(Request $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed',
-        ]);
+        $rules = [
+            'identification'      => 'required',
+            'name'                => 'required|string|max:255',
+            'last_name'           => 'nullable|string|max:255',
+            'email'               => 'required|email|unique:users,email',
+            'id_role'             => 'required|integer|exists:roles,id',
+            'telephone'           => 'required|string|max:15',
+            'address'             => 'required|string|max:255',
+            'department'          => 'required|string|max:255',
+            'municipality'        => 'required|string|max:255',
+            'password'            => 'required|string|min:8',
+        ];
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $messages = [
+            'identification.required' => 'La identificación es obligatoria.',
+            'identification.numeric'  => 'La identificación debe ser un número.',
+            'email.required'          => 'El correo electrónico es obligatorio.',
+            'email.email'             => 'El formato del correo electrónico no es válido.',
+            'email.unique'            => 'El correo ya está registrado.',
+            'id_role.required'        => 'El rol es obligatorio.',
+            'id_role.exists'          => 'El rol seleccionado no es válido.',
+            'password.required'       => 'La contraseña es obligatoria.',
+            'password.min'            => 'La contraseña debe tener al menos 8 caracteres.',
+        ];
 
-        return response()->json($user, 201);
-    }
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-    public function login(): JsonResponse
-    {
-
-        if (!$token = auth('api')->attempt([
-            "email"     => request()->email,
-            "password"  => request()->password,
-        ])) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        return $this->respondWithToken($token);
+        $validatedData = $validator->validated();
+
+        $user = new User;
+        $user->identification = $request->identification;
+        $user->name           = $request->name;
+        $user->last_name      = $request->last_name ?? null;
+        $user->email          = $request->email;
+        $user->id_role        = $request->id_role;
+        $user->telephone      = $request->telephone;
+        $user->address        = $request->address;
+        $user->department     = $request->department;
+        $user->municipality   = $request->municipality;
+        $user->password       = bcrypt($request->password);
+
+        $user->save();
+
+
+        return response()->json([
+            'message' => 'Usuario creado correctamente.',
+            'user'    => $user
+        ], 201);
+    }
+
+    public function login(Request $request): JsonResponse
+    {
+        // Validar que el email y la contraseña sean proporcionados
+        $credentials = $request->only('email', 'password');
+
+        try {
+            // Intentar obtener el token con las credenciales
+            if (!$token = JWTAuth::attempt($credentials)) {
+                // Si el token no es generado, devolver error 401
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
+            // Si el token es generado exitosamente, responder con el token
+            return $this->respondWithToken($token);
+        } catch (JWTException $e) {
+            // Si ocurre algún error con el JWT, devolver un error con mensaje específico
+            return response()->json(['error' => 'Could not create token', 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function getUser(Request $request): JsonResponse

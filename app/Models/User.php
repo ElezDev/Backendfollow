@@ -41,14 +41,15 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
-    // protected $allowIncluded = [
-    //     'Role',
-    //     'Apprentice',
-    //     'Message',
-    //     'Notification'
-    // ];
+    protected $allowIncluded = [
+        'role',
+        'apprentices',
+        'messages',
+        'notifications'
+    ];
 
     protected $allowFilter = [
         'id',
@@ -183,19 +184,14 @@ class User extends Authenticatable implements JWTSubject
         return $query->get();
     }
 
-
     public function trainer()
     {
         return $this->hasMany(Trainer::class, 'user_id');
     }
 
-
-
     public function apprentices()
     {
         return $this->hasManyThrough(Apprentice::class, Trainer::class, 'user_id', 'id_trainer');
     }
-
-
 
 }
