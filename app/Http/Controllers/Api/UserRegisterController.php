@@ -33,19 +33,18 @@ class UserRegisterController extends Controller
 {
     
     $request->validate([
-        'identification' => 'required|integer',
+        'identification' => 'required|numeric',
         'name' => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
-        'telephone' => 'required|integer',
+        'telephone' => 'required|numeric',
         'email' => 'required|email|max:255|unique:users',
         'address' => 'required|string|max:255',
         'department' => 'required|string|max:255',
         'municipality' => 'required|string|max:255',
-        'password' => 'nullable|string|max:255', // La contraseña no es requerida, se establecerá por defecto
+        'password' => 'nullable|string|max:255', 
         'id_role' => 'required|exists:roles,id',
     ]);
 
-    // Asignar la contraseña por defecto 'sena' si no se proporciona
     $request->merge([
         'password' => $request->password ?? 'sena',
     ]);
