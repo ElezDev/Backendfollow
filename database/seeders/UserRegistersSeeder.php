@@ -14,18 +14,18 @@ class UserRegistersSeeder extends Seeder
     public function run(): void
     {
         DB::table('user_registers')->insert([
-            // Aprendiz
+            // Super Administrador
             [
-                'identification' => 143242112,
-                'name' => 'Juan',
-                'last_name' => 'Perez',
-                'telephone' => 1234,
-                'email' => 'aprendiz@example.com',
-                'address' => 'Hola Mundo',
+                'identification' => 112233445,
+                'name' => 'Carlos',
+                'last_name' => 'Martinez',
+                'telephone' => 9101,
+                'email' => 'superadmin@gmail.com',
+                'address' => 'Avenida Siempre Viva 742',
                 'department' => 'Cauca',
                 'municipality' => 'Popayán',
                 'password' => bcrypt('12345678'), // Asegúrate de encriptar la contraseña
-                'id_role' => 4, // Suponiendo que 2 es el rol de aprendiz
+                'id_role' => 1, // Suponiendo que 3 es el rol de super administrador
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -35,31 +35,30 @@ class UserRegistersSeeder extends Seeder
                 'name' => 'Ana',
                 'last_name' => 'Gomez',
                 'telephone' => 5678,
-                'email' => 'admin@example.com',
+                'email' => 'admin@gmail.com',
                 'address' => 'Calle Falsa 123',
                 'department' => 'Cauca',
                 'municipality' => 'Popayán',
-                'password' => bcrypt('admin123'), // Asegúrate de encriptar la contraseña
+                'password' => bcrypt('12345678'), // Asegúrate de encriptar la contraseña
                 'id_role' => 2, // Suponiendo que 1 es el rol de administrador
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Super Administrador
+            // Aprendiz
             [
-                'identification' => 112233445,
-                'name' => 'Carlos',
-                'last_name' => 'Martinez',
-                'telephone' => 9101,
-                'email' => 'superadmin@example.com',
-                'address' => 'Avenida Siempre Viva 742',
+                'identification' => 143242112,
+                'name' => 'Juan',
+                'last_name' => 'Perez',
+                'telephone' => 1234,
+                'email' => 'aprendiz@gmail.com',
+                'address' => 'Hola Mundo',
                 'department' => 'Cauca',
                 'municipality' => 'Popayán',
-                'password' => bcrypt('superadmin123'), // Asegúrate de encriptar la contraseña
-                'id_role' => 1, // Suponiendo que 3 es el rol de super administrador
+                'password' => bcrypt('12345678'), // Asegúrate de encriptar la contraseña
+                'id_role' => 4, // Suponiendo que 2 es el rol de aprendiz
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ]);
     }
-
 }
