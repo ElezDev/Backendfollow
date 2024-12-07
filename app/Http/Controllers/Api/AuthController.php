@@ -47,7 +47,8 @@ class AuthController extends Controller
 
     protected function respondWithToken($token): JsonResponse
     {
-        $user = auth('api')->user();
+        $user_id = auth('api')->user()->id;
+        $user = User::with('role')->findOrFail($user_id);
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'bearer',
