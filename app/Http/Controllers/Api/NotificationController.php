@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\notification;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -26,6 +26,26 @@ class NotificationController extends Controller
         }
 
         return response()->json($notifications->get());
+    }
+
+    public function getReceivedNotifications(): JsonResponse
+    {
+
+        $user = auth('api')->user();
+
+        $notifications = Notification::where('user_id', $user->id)->orderBy('id', 'desc')->get();
+
+        return response()->json($notifications);
+    }
+
+    public function getNotificationsSend(): JsonResponse
+    {
+
+        $user = auth('api')->user();
+
+        $notifications = Notification::where('sender_id', $user->id)->orderBy('id', 'desc')->get();
+
+        return response()->json($notifications);
     }
 
     /**

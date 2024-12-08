@@ -140,4 +140,6 @@ class TrainerController extends Controller
         ]);
         return response()->json($notification);
     }
+
+    
 }
