@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Followup;
+use App\Models\User;
 use App\Models\Trainer;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Models\Followup;
 use App\Models\Notification;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 
 class TrainerController extends Controller
 {
@@ -165,7 +166,20 @@ class TrainerController extends Controller
      */
     public function createVisitToApprentice(Request $request): JsonResponse
     {
+        $apprendice_id = $request->apprendice_id;
+        $trainner = Trainer::whereHas('apprentices', function ($query) use ($apprendice_id) {
+            $query->where('user_id', $apprendice_id);
+        })->latest()->first();
+        $request->request->add(['id_trainer' => $trainner->id]);
+        unset($request->apprendice_id);
         $followUp = Followup::create($request->all());
         return response()->json($followUp, 201);
+    }
+
+    public function updateVisitToApprenticeById(Request $request, string|int $id): JsonResponse
+    {
+        $followUp = Followup::findOrFail($id);
+        $followUp->update($request->all());
+        return response()->json($followUp);
     }
 }
