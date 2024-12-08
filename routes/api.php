@@ -42,6 +42,7 @@ Route::group([
 ], function ($router) {
     Route::get('get_trainer_assigned_by_apprentice', [ApprenticeController::class, 'getTrainerByApprentice']);
     Route::get('get_apprentices_by_instructor', [TrainerController::class, 'getApprenticesByTrainner']);
+    Route::get('get_apprentice_by_user_id/{id}', [ApprenticeController::class, 'getUserApprenticeById']);
 });
 
 // Rutas para log

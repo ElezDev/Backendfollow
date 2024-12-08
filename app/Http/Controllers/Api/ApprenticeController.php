@@ -60,6 +60,14 @@ class ApprenticeController extends Controller
         return response()->json($apprentice);
     }
 
+    public function getUserApprenticeById(string|int $id): JsonResponse
+    {
+
+        $apprentice = User::with(['apprentice'])->findOrFail($id);
+
+        return response()->json($apprentice);
+    }
+
     /**
      * Update the specified resource in storage.
      *
