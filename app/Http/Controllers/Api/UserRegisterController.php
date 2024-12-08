@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class UserRegisterController extends Controller
 {
@@ -46,7 +48,7 @@ class UserRegisterController extends Controller
     ]);
 
     $request->merge([
-        'password' => $request->password ?? 'sena',
+        'password' => $request->password ?? 'sena@2024',
     ]);
 
     $user = User::create($request->all());
@@ -195,6 +197,38 @@ class UserRegisterController extends Controller
     
         return response()->json($userRegister);
     }
+
+
+    public function updateUser(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'department' => 'required|string|max:255',
+            'municipality' => 'required|string|max:255',
+        ]);
+
+        $user = User::findOrFail($id); 
+        $user->update($request->only(['name', 'last_name', 'email', 'department', 'municipality']));
+
+        return response()->json($user);
+
+    }
+
+
+    public function eliminarUser($id)
+{
+    try {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json(['message' => 'Instructor eliminado correctamente'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Error al eliminar el instructor'], 500);
+    }
+}
+
     
     
 }
