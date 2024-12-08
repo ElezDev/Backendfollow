@@ -182,4 +182,11 @@ class TrainerController extends Controller
         $followUp->update($request->all());
         return response()->json($followUp);
     }
+
+    public function deleteVisit(string|int $id): JsonResponse
+    {
+        $followUp = Followup::findOrFail($id);
+        $followUp->delete();
+        return response()->json(null, 204);
+    }
 }
