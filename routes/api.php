@@ -139,3 +139,5 @@ Route::get('getCompany', action: [CompanyController::class, 'getCompany']);
 
 
 Route::get('user_by_id/{id}', action: [UserRegisterController::class, 'getDataUserById']);
+
+Route::get('apprentices_by_modalidad', [ApprenticeController::class, 'getApprenticesByModalidad']);
