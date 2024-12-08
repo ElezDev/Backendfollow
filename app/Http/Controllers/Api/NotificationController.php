@@ -102,7 +102,8 @@ class NotificationController extends Controller
 
     public function obtenerNotificacionesUsuario()
     {
-        $authUser = auth()->user();
+     
+        $authUser = auth('api')->user();
         $notificaciones = Notification::where('user_id', $authUser->id)
             ->with('sender')
             ->get();
