@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\VerifiedMail;
 use App\Models\Apprentice;
 use App\Models\Contract;
 use App\Models\Notification;
@@ -10,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+
 
 class ApprenticeController extends Controller
 {
@@ -118,7 +121,7 @@ class ApprenticeController extends Controller
                 'address' => $request->address,
                 'department' => $request->department,
                 'municipality' => $request->municipality,
-                'password' => bcrypt('aprendiz'),
+                'password' => bcrypt('sena@2024'),
                 'id_role' => 4,
             ]);
 
@@ -150,6 +153,8 @@ class ApprenticeController extends Controller
                 'user_id' => $user->id,
                 'sender_id' => $authUser->id,
             ]);
+
+            Mail::to(request()->email)->queue(new VerifiedMail($user));
 
             DB::commit();
             return response()->json(['message' => 'Aprendiz registrado exitosamente.'], 201);

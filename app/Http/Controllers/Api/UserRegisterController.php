@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class UserRegisterController extends Controller
 {
@@ -46,7 +48,7 @@ class UserRegisterController extends Controller
     ]);
 
     $request->merge([
-        'password' => $request->password ?? 'sena',
+        'password' => $request->password ?? 'sena@2024',
     ]);
 
     $user = User::create($request->all());
