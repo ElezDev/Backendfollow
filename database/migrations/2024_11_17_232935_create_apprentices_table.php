@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('academic_level');
             $table->string('program');
             $table->integer('ficha');
+            $table->string('modalidad');
             $table->foreignId('user_id')->references('id')->on('users');
             // $table->foreignId('id_user_register')->references('id')->on('user_registers');
             $table->foreignId('id_contract')->references('id')->on('contracts');

@@ -12,7 +12,7 @@ class Apprentice extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     protected $allowIncluded = ['users', 'Contract', 'Trainer', 'Log'];
 

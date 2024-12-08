@@ -129,21 +129,22 @@ class ApprenticeController extends Controller
                 'user_id' => $user->id,
                 'id_contract' => $contract->id,
                 'id_trainer' => $request->id_trainer,
+                'modalidad' => $request->modalidad,
             ]);
 
-            $authUser = auth()->user(); 
+            $authUser = auth('api')->user();
+            $message = "Has sido registrado exitosamente como aprendiz. Bienvenido(a), {$user->name} {$user->last_name}.";
+
             Notification::create([
                 'shipping_date' => now(),
                 'content' => 'Registro completado',
-                'message' => 'Has sido registrado exitosamente como aprendiz.',
-                'user_id' => $user->id, 
-                'sender_id' => $authUser->id, 
+                'message' => $message,
+                'user_id' => $user->id,
+                'sender_id' => $authUser->id,
             ]);
-    
-            DB::commit();
+
 
             DB::commit();
-
             return response()->json(['message' => 'Aprendiz registrado exitosamente.'], 201);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -175,4 +176,7 @@ class ApprenticeController extends Controller
 
         return response()->json($apprentice);
     }
+
+   
+
 }
