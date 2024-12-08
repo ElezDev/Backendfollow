@@ -44,6 +44,21 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Trainner
+            [
+                'identification' => 1234567890,
+                'name' => 'Luis',
+                'last_name' => 'Gomez',
+                'telephone' => 5678,
+                'email' => 'trainer@gmail.com',
+                'address' => 'Calle Falsa 123',
+                'department' => 'Cauca',
+                'municipality' => 'Popayán',
+                'password' => bcrypt('12345678'),
+                'id_role' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Aprendiz
             [
                 'identification' => 143242112,
