@@ -118,8 +118,15 @@ Route::get('user_by_roles_instructor', action: [UserRegisterController::class, '
 Route::get('user_by_roles_aprendiz', action: [UserRegisterController::class, 'getUserRegistersByAprendiz']);
 Route::get('get_trainer', action: [UserRegisterController::class, 'getTrainer']);
 
-Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
+// Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
 
 
+Route::group([
+    'middleware' => 'api',
+], function ($router) {
+    Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
+    Route::get('/notification_by_person', [NotificationController::class, 'obtenerNotificacionesUsuario']);
+
+});
 
 Route::get('getCompany', action: [CompanyController::class, 'getCompany']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Apprentice;
 use App\Models\Contract;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -129,6 +130,17 @@ class ApprenticeController extends Controller
                 'id_contract' => $contract->id,
                 'id_trainer' => $request->id_trainer,
             ]);
+
+            $authUser = auth()->user(); 
+            Notification::create([
+                'shipping_date' => now(),
+                'content' => 'Registro completado',
+                'message' => 'Has sido registrado exitosamente como aprendiz.',
+                'user_id' => $user->id, 
+                'sender_id' => $authUser->id, 
+            ]);
+    
+            DB::commit();
 
             DB::commit();
 

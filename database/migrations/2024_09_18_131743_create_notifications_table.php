@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->date("shipping_date");
-            $table->string("content");
+            $table->date('shipping_date'); 
+            $table->string('content'); 
+            $table->text('message'); 
             $table->timestamps();
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->constrained('users'); 
+            $table->foreignId('sender_id')->constrained('users'); 
         });
     }
+    
 
     /**
      * Reverse the migrations.
