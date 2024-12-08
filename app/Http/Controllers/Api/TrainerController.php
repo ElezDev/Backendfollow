@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Apprentice;
 use App\Models\Trainer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\Notification;
 
 class TrainerController extends Controller
 {
@@ -120,5 +120,24 @@ class TrainerController extends Controller
             ->get();
 
         return response()->json($apprentices);
+    }
+
+    /**
+     * Create new notification by trainner
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createNotification(Request $request): JsonResponse
+    {
+        $authUser = auth('api')->user();
+
+        $notification = Notification::create([
+            'shipping_date' => now(),
+            'content'       => 'Nueva notificación',
+            'message'       => $request->message,
+            'user_id'       => $request->user_id,
+            'sender_id'     => $authUser->id,
+        ]);
+        return response()->json($notification);
     }
 }
