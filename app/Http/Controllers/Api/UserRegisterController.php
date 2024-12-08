@@ -197,6 +197,24 @@ class UserRegisterController extends Controller
     
         return response()->json($userRegister);
     }
+
+
+    public function updateUser(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'department' => 'required|string|max:255',
+            'municipality' => 'required|string|max:255',
+        ]);
+
+        $user = User::findOrFail($id); 
+        $user->update($request->only(['name', 'last_name', 'email', 'department', 'municipality']));
+
+        return response()->json($user);
+
+    }
     
     
 }
