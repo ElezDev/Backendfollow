@@ -83,7 +83,7 @@ class User_register extends Authenticatable implements JWTSubject
     }
     public function Notification(): HasMany
     {
-        return $this->hasMany(notification::class);
+        return $this->hasMany(Notification::class);
     }
 
     // Encriptar la contraseña automáticamente al crear o actualizar

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\notification;
+use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-   /**
+    /**
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
@@ -96,5 +98,18 @@ class NotificationController extends Controller
 
         return response()->json(null, 204); // Respuesta vacía con código 204
     }
+
+
+    public function obtenerNotificacionesUsuario()
+    {
+        $authUser = auth()->user();
+        $notificaciones = Notification::where('user_id', $authUser->id)
+            ->with('sender')
+            ->get();
+    
+        return response()->json($notificaciones, 200);
+    }
+    
+
 }
 
