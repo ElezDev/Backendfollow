@@ -61,13 +61,8 @@ Route::apiResource('trainers', TrainerController::class);
 Route::apiResource('followups', FollowupController::class);
 Route::apiResource('notifications', NotificationController::class);
 Route::apiResource('user_registers', UserRegisterController::class);
+Route::apiResource('contracts', ContractController::class);
 
-// Rutas para Contracts
-Route::get('contracts', [ContractController::class, 'index'])->name('api.contracts.index');
-Route::post('contracts', [ContractController::class, 'store'])->name('api.contract.store');
-Route::get('contracts/{contract}', [ContractController::class, 'show'])->name('api.contract.show');
-Route::put('contracts/{contract}', [ContractController::class, 'update'])->name('api.contract.update');
-Route::delete('contracts/{contract}', [ContractController::class, 'destroy'])->name('api.contract.delete');
 
 Route::get('/departamentos', [DepartmentController::class, 'index']);
 
@@ -78,7 +73,6 @@ Route::get('user_by_roles_aprendiz', action: [UserRegisterController::class, 'ge
 Route::get('get_trainer', action: [UserRegisterController::class, 'getTrainer']);
 
 // Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
-
 
 Route::group([
     'middleware' => 'api',
