@@ -60,6 +60,14 @@ class ApprenticeController extends Controller
         return response()->json($apprentice);
     }
 
+    public function getUserApprenticeById(string|int $id): JsonResponse
+    {
+
+        $apprentice = User::with(['apprentice.contract.Company'])->findOrFail($id);
+
+        return response()->json($apprentice);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -143,7 +151,6 @@ class ApprenticeController extends Controller
                 'sender_id' => $authUser->id,
             ]);
 
-
             DB::commit();
             return response()->json(['message' => 'Aprendiz registrado exitosamente.'], 201);
         } catch (\Exception $e) {
@@ -167,7 +174,13 @@ class ApprenticeController extends Controller
         }
 
         // Buscar el último aprendiz relacionado con el usuario autenticado
-        $apprentice = Apprentice::with(['trainer.user'])->where('user_id', $user->id)->latest('created_at')->first();
+        $apprentice = Apprentice::with([
+            'trainer.user',
+            'trainer.followUps'
+        ])
+            ->where('user_id', $user->id)
+            ->latest('created_at')
+            ->first();
 
         // Verificar si se encontró un aprendiz
         if (!$apprentice) {

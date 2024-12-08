@@ -14,7 +14,7 @@ class Apprentice extends Model
 
     protected $guarded = [];
 
-    protected $allowIncluded = ['users', 'Contract', 'Trainer', 'Log'];
+    protected $allowIncluded = ['user', 'contract', 'trainer', 'logs'];
 
     protected $allowFilter = ['id', 'academic_level', 'program', 'ficha', 'user_id', 'id_contract', 'id_trainer'];
 
@@ -32,7 +32,7 @@ class Apprentice extends Model
 
     public function contract(): BelongsTo
     {
-        return $this->belongsTo(Contract::class);
+        return $this->belongsTo(Contract::class, 'id_contract');
     }
 
 

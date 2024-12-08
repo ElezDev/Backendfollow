@@ -41,33 +41,31 @@ class Trainer extends Model
         'user_id'
     ];
 
-  
 
-    public function user()
-{
-    return $this->belongsTo(User::class, 'user_id');  // Asumiendo que el entrenador tiene una relación con el usuario
-}
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');  // Asumiendo que el entrenador tiene una relación con el usuario
+    }
 
     public function trainer()
-{
-    return $this->belongsTo(Trainer::class); // Assuming Apprentice belongs to Trainer
-}
-
-
+    {
+        return $this->belongsTo(Trainer::class); // Assuming Apprentice belongs to Trainer
+    }
 
     public function apprentices(): HasMany
     {
-        return $this->hasMany(Apprentice::class);
+        return $this->hasMany(Apprentice::class, 'id_trainer');
     }
 
     public function followUps(): HasMany
     {
-        return $this->hasMany(Followup::class);
+        return $this->hasMany(Followup::class, 'id_trainer');
     }
 
     public function logs(): HasMany
     {
-        return $this->hasMany(Log::class);
+        return $this->hasMany(Log::class, 'id_trainer');
     }
 
     public function scopeIncluded(Builder $query): void

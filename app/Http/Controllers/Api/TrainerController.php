@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Apprentice;
 use App\Models\Trainer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TrainerController extends Controller
@@ -103,6 +105,20 @@ class TrainerController extends Controller
         // Elimina el contrato
         $trainer->delete();
 
-        return response()->json(null, 204); 
+        return response()->json(null, 204);
+    }
+
+    /**
+     * Get apprentices by trainner
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getApprenticesByTrainner(): JsonResponse
+    {
+        $user = auth('api')->user();
+        $apprentices = Trainer::with(['apprentices.user'])
+            ->where('user_id', $user->id)
+            ->get();
+
+        return response()->json($apprentices);
     }
 }

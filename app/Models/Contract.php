@@ -14,7 +14,7 @@ class Contract extends Model
     }
     public function Company()
     {
-        return $this->belongsTo('App\Models\Company');
+        return $this->belongsTo(Company::class, 'id_company');
     }
 
     // Define los campos que se pueden asignar masivamente
