@@ -139,15 +139,15 @@ class ApprenticeController extends Controller
                 'id_trainer' => $request->id_trainer,
             ]);
 
-            $authUser = auth()->user(); 
+            $authUser = auth()->user();
             Notification::create([
                 'shipping_date' => now(),
                 'content' => 'Registro completado',
                 'message' => 'Has sido registrado exitosamente como aprendiz.',
-                'user_id' => $user->id, 
-                'sender_id' => $authUser->id, 
+                'user_id' => $user->id,
+                'sender_id' => $authUser->id,
             ]);
-    
+
             DB::commit();
 
             DB::commit();
@@ -174,7 +174,13 @@ class ApprenticeController extends Controller
         }
 
         // Buscar el último aprendiz relacionado con el usuario autenticado
-        $apprentice = Apprentice::with(['trainer.user'])->where('user_id', $user->id)->latest('created_at')->first();
+        $apprentice = Apprentice::with([
+            'trainer.user',
+            'trainer.followUps'
+        ])
+            ->where('user_id', $user->id)
+            ->latest('created_at')
+            ->first();
 
         // Verificar si se encontró un aprendiz
         if (!$apprentice) {
