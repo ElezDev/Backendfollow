@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\VerifiedMail;
 use App\Models\Apprentice;
 use App\Models\Contract;
+use App\Models\Followup;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -204,4 +205,14 @@ class ApprenticeController extends Controller
         return response()->json($apprenticesByModalidad);
     }
 
+    public function getAllFollowUpsByApprentice(): JsonResponse
+    {
+        $user = auth('api')->user();
+
+        $followUps = Followup::whereHas('trainer.apprentices', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
+        return response()->json($followUps);
+    }
 }
