@@ -14,7 +14,7 @@ class Apprentice extends Model
 
     protected $guarded = ['id'];
 
-    protected $allowIncluded = ['users', 'Contract', 'Trainer', 'Log'];
+    protected $allowIncluded = ['user', 'contract', 'trainer', 'logs'];
 
     protected $allowFilter = ['id', 'academic_level', 'program', 'ficha', 'user_id', 'id_contract', 'id_trainer'];
 

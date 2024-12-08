@@ -41,6 +41,7 @@ Route::group([
     'middleware' => 'api',
 ], function ($router) {
     Route::get('get_trainer_assigned_by_apprentice', [ApprenticeController::class, 'getTrainerByApprentice']);
+    Route::get('get_apprentices_by_instructor', [TrainerController::class, 'getApprenticesByTrainner']);
 });
 
 // Rutas para log
