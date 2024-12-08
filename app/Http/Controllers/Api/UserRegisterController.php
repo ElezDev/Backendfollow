@@ -215,6 +215,20 @@ class UserRegisterController extends Controller
         return response()->json($user);
 
     }
+
+
+    public function eliminarUser($id)
+{
+    try {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json(['message' => 'Instructor eliminado correctamente'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Error al eliminar el instructor'], 500);
+    }
+}
+
     
     
 }

@@ -142,3 +142,5 @@ Route::get('apprentices_by_modalidad', [ApprenticeController::class, 'getApprent
 
 
 Route::put('update_user/{id}', [UserRegisterController::class, 'updateUser']);
+Route::delete('delete_user/{id}', [UserRegisterController::class, 'eliminarUser']);
+
