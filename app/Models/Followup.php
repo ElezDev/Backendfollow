@@ -2,45 +2,48 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Followup extends Model
 {
-    public function Trainer(){
-        return $this->belongsTo('App\Models\Trainer');
-    }
+
     use HasFactory;
-    protected $fillable = [
+
+    protected $guarded = ['id'];
+
+    protected $allowIncluded = ['trainer'];
+
+    protected $allowFilter = [
+        'id',
         'type_of_agreement',
         'date',
         'name_of_immediate_boss',
         'email',
         'telephone',
         'observation',
-        'id_trainer' // Corrigiendo el nombre del campo
+        'id_trainer'
     ];
 
-    protected $allowIncluded = ['Trainer'];
+    protected $allowSort = [
+        'id',
+        'type_of_agreement',
+        'date',
+        'name_of_immediate_boss',
+        'email',
+        'telephone',
+        'observation',
+        'id_trainer'
+    ];
 
-    protected $allowFilter = ['id',  'type_of_agreement',
-    'date',
-    'name_of_immediate_boss',
-    'email',
-    'telephone',
-    'observation',
-    'id_trainer'];
+    public function trainer(): BelongsTo
+    {
+        return $this->belongsTo(Trainer::class, 'id_trainer');
+    }
 
-    protected $allowSort = ['id', 'type_of_agreement',
-    'date',
-    'name_of_immediate_boss',
-    'email',
-    'telephone',
-    'observation',
-    'id_trainer'];
-
-    public function scopeIncluded(Builder $query)
+    public function scopeIncluded(Builder $query): void
     {
         if (empty($this->allowIncluded) || empty(request('included'))) {
             return;
@@ -58,7 +61,7 @@ class Followup extends Model
         $query->with($relations);
     }
 
-    public function scopeFilter(Builder $query)
+    public function scopeFilter(Builder $query): void
     {
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
@@ -74,7 +77,7 @@ class Followup extends Model
         }
     }
 
-    public function scopeSort(Builder $query)
+    public function scopeSort(Builder $query): void
     {
         if (empty($this->allowSort) || empty(request('sort'))) {
             return;
@@ -97,4 +100,3 @@ class Followup extends Model
         }
     }
 }
-

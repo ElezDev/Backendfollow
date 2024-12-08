@@ -47,6 +47,7 @@ Route::group([
     Route::get('get_received_notifications_by_user', [NotificationController::class, 'getReceivedNotifications']);
     Route::get('get_notifications_send_by_user', [NotificationController::class, 'getNotificationsSend']);
 
+    Route::get('get_visits_by_apprentice/{id}', [TrainerController::class, 'getVisitsByApprentice']);
     Route::post('create_visit_to_apprentice', [TrainerController::class, 'createVisitToApprentice']);
 });
 

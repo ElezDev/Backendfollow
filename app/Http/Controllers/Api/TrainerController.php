@@ -142,6 +142,26 @@ class TrainerController extends Controller
         return response()->json($notification);
     }
 
+    /**
+     * Get all visits by apprentice
+     * @param string|int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getVisitsByApprentice(string|int $id): JsonResponse
+    {
+
+        $followUps = Followup::with('trainer')->whereHas('trainer.apprentices', function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->get();
+
+        return response()->json($followUps);
+    }
+
+    /**
+     * Create new visit by apprentice
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function createVisitToApprentice(Request $request): JsonResponse
     {
         $followUp = Followup::create($request->all());

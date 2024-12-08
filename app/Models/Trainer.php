@@ -12,7 +12,7 @@ class Trainer extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     protected $allowIncluded = [
         'users',
@@ -41,16 +41,14 @@ class Trainer extends Model
         'user_id'
     ];
 
-
-
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');  // Asumiendo que el entrenador tiene una relación con el usuario
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function trainer()
     {
-        return $this->belongsTo(Trainer::class); // Assuming Apprentice belongs to Trainer
+        return $this->belongsTo(Trainer::class);
     }
 
     public function apprentices(): HasMany
