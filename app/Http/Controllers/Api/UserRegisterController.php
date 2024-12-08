@@ -170,5 +170,31 @@ class UserRegisterController extends Controller
     
         return response()->json($users);
     }
+
+
+    public function obtenerUsuarioAutenticado()
+    {
+        try {
+            $user = auth('api')->user();
+
+            if (!$user) {
+                return response()->json(['error' => 'Usuario no autenticado.'], 401);
+            }
+
+            return response()->json($user, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener el usuario autenticado: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+
+    public function getDataUserById($id)
+    {
+        $userRegister = User::with('apprentice')->findOrFail($id);
+    
+        return response()->json($userRegister);
+    }
+    
     
 }

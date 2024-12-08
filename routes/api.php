@@ -128,7 +128,11 @@ Route::group([
 ], function ($router) {
     Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
     Route::get('/notification_by_person', [NotificationController::class, 'obtenerNotificacionesUsuario']);
+    Route::get('/get_user_data', [UserRegisterController::class, 'obtenerUsuarioAutenticado']);
 
 });
 
 Route::get('getCompany', action: [CompanyController::class, 'getCompany']);
+
+
+Route::get('user_by_id/{id}', action: [UserRegisterController::class, 'getDataUserById']);
