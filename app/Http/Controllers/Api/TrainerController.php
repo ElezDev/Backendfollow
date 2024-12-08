@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Followup;
 use App\Models\Trainer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -141,5 +142,10 @@ class TrainerController extends Controller
         return response()->json($notification);
     }
 
+    public function createVisitToApprentice(Request $request): JsonResponse
+    {
+        $followUp = Followup::create($request->all());
+        return response()->json($followUp, 201);
+    }
     
 }
