@@ -63,7 +63,7 @@ class ApprenticeController extends Controller
     public function getUserApprenticeById(string|int $id): JsonResponse
     {
 
-        $apprentice = User::with(['apprentice'])->findOrFail($id);
+        $apprentice = User::with(['apprentice.contract.Company'])->findOrFail($id);
 
         return response()->json($apprentice);
     }

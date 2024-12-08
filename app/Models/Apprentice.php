@@ -32,7 +32,7 @@ class Apprentice extends Model
 
     public function contract(): BelongsTo
     {
-        return $this->belongsTo(Contract::class);
+        return $this->belongsTo(Contract::class, 'id_contract');
     }
 
 
