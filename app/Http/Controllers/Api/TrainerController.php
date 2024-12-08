@@ -152,7 +152,8 @@ class TrainerController extends Controller
 
         $followUps = Followup::with('trainer')->whereHas('trainer.apprentices', function ($query) use ($id) {
             $query->where('user_id', $id);
-        })->get();
+        })->orderBy('id', 'desc')
+            ->get();
 
         return response()->json($followUps);
     }
@@ -167,5 +168,4 @@ class TrainerController extends Controller
         $followUp = Followup::create($request->all());
         return response()->json($followUp, 201);
     }
-    
 }
