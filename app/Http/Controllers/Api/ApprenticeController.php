@@ -177,6 +177,13 @@ class ApprenticeController extends Controller
         return response()->json($apprentice);
     }
 
-   
+    public function getApprenticesByModalidad()
+    {
+        $apprenticesByModalidad = Apprentice::select('modalidad', DB::raw('count(*) as count'))
+            ->groupBy('modalidad')
+            ->get();
+
+        return response()->json($apprenticesByModalidad);
+    }
 
 }
