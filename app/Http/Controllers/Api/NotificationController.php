@@ -33,7 +33,10 @@ class NotificationController extends Controller
 
         $user = auth('api')->user();
 
-        $notifications = Notification::where('user_id', $user->id)->orderBy('id', 'desc')->get();
+        $notifications = Notification::with(['sender'])
+            ->where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->get();
 
         return response()->json($notifications);
     }
@@ -43,7 +46,10 @@ class NotificationController extends Controller
 
         $user = auth('api')->user();
 
-        $notifications = Notification::where('sender_id', $user->id)->orderBy('id', 'desc')->get();
+        $notifications = Notification::with(['user'])
+            ->where('sender_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->get();
 
         return response()->json($notifications);
     }

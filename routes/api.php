@@ -48,65 +48,14 @@ Route::group([
     Route::get('get_notifications_send_by_user', [NotificationController::class, 'getNotificationsSend']);
 });
 
-// Rutas para log
-Route::get('logs', [LogController::class, 'index'])->name('api.logs.index');
-Route::post('logs', [LogController::class, 'store'])->name('api.log.store');
-Route::get('logs/{log}', [LogController::class, 'show'])->name('api.log.show');
-Route::put('logs/{log}', [LogController::class, 'update'])->name('api.log.update');
-Route::delete('logs/{log}', [LogController::class, 'destroy'])->name('api.log.delete');
-
-// Rutas para Companies
-Route::get('companies', [CompanyController::class, 'index'])->name('api.companies.index');
-Route::post('companies', [CompanyController::class, 'store'])->name('api.companies.store');
-Route::get('companies/{company}', [CompanyController::class, 'show'])->name('api.companies.show');
-Route::put('companies/{company}', [CompanyController::class, 'update'])->name('api.companies.update');
-Route::delete('companies/{company}', [CompanyController::class, 'destroy'])->name('api.companies.delete');
-
-// Rutas para Messages
-Route::get('messages', [MessageController::class, 'index'])->name('api.messages.index');
-Route::post('messages', [MessageController::class, 'store'])->name('api.messages.store');
-Route::get('messages/{message}', [MessageController::class, 'show'])->name('api.messages.show');
-Route::put('messages/{message}', [MessageController::class, 'update'])->name('api.messages.update');
-Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('api.messages.delete');
-
-// Rutas para role
-Route::get('roles', [RoleController::class, 'index'])->name('api.roles.index');
-Route::post('roles', [RoleController::class, 'store'])->name('api.role.store');
-Route::get('roles/{role}', [RoleController::class, 'show'])->name('api.role.show');
-Route::put('roles/{role}', [RoleController::class, 'update'])->name('api.role.update');
-Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('api.role.delete');
-
-// Rutas para role
-Route::get('trainers', [TrainerController::class, 'index'])->name('api.trainers.index');
-Route::post('trainers', [TrainerController::class, 'store'])->name('api.trainer.store');
-Route::get('trainers/{trainer}', [TrainerController::class, 'show'])->name('api.trainer.show');
-Route::put('trainers/{trainer}', [TrainerController::class, 'update'])->name('api.trainer.update');
-Route::delete('trainers/{trainer}', [TrainerController::class, 'destroy'])->name('api.trainer.delete');
-
-
-// Rutas para Followups
-Route::get('followups', [FollowupController::class, 'index'])->name('api.followups.index');
-Route::post('followups', [FollowupController::class, 'store'])->name('api.followup.store');
-Route::get('followups/{followup}', [FollowupController::class, 'show'])->name('api.followup.show');
-Route::put('followups/{followup}', [FollowupController::class, 'update'])->name('api.followup.update');
-Route::delete('followups/{followup}', [FollowupController::class, 'destroy'])->name('api.followup.delete');
-
-// Rutas para Notifications
-Route::get('notifications', [NotificationController::class, 'index'])->name('api.notifications.index');
-Route::post('notifications', [NotificationController::class, 'store'])->name('api.notification.store');
-Route::get('notifications/{notification}', [NotificationController::class, 'show'])->name('api.notification.show');
-Route::put('notifications/{notification}', [NotificationController::class, 'update'])->name('api.notification.update');
-Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])->name('api.notification.delete');
-
-// Rutas para User Register API
-Route::get('user_registers', [UserRegisterController::class, 'index'])->name('api.user_registers.index');
-Route::post('user_registers', [UserRegisterController::class, 'store'])->name('api.user_register.store');
-Route::get('user_registers/{user_register}', [UserRegisterController::class, 'show'])->name('api.user_register.show');
-Route::put('user_registers/{user_register}', [UserRegisterController::class, 'update'])->name('api.user_register.update');
-Route::delete('user_registers/{user_register}', [UserRegisterController::class, 'destroy'])->name('api.user_register.delete');
-
-
-
+Route::apiResource('logs', LogController::class);
+Route::apiResource('companies', CompanyController::class);
+Route::apiResource('messages', MessageController::class);
+Route::apiResource('roles', RoleController::class);
+Route::apiResource('trainers', TrainerController::class);
+Route::apiResource('followups', FollowupController::class);
+Route::apiResource('notifications', NotificationController::class);
+Route::apiResource('user_registers', UserRegisterController::class);
 
 // Rutas para Contracts
 Route::get('contracts', [ContractController::class, 'index'])->name('api.contracts.index');
