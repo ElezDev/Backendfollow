@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
@@ -109,7 +110,7 @@ class AuthController extends Controller
 
         if ($user) {
             $user->update(['code_verified' => uniqid()]);
-            Mail::to($request->email)->send();
+            Mail::to($request->email)->send(new ResetPasswordMail($user));
             return response()->json(['message' => 200]);
         } else {
             return response()->json(['message' => 403]);
