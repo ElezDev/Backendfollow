@@ -189,4 +189,16 @@ class TrainerController extends Controller
         $followUp->delete();
         return response()->json(null, 204);
     }
+
+    public function getAllVisitsByInstructor(): JsonResponse
+    {
+
+        $user = auth('api')->user();
+
+        $followUps = Followup::whereHas('trainer', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
+        return response()->json($followUps);
+    }
 }
