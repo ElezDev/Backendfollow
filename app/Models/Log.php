@@ -40,11 +40,11 @@ class Log extends Model
 
     public function trainer(): BelongsTo
     {
-        return $this->belongsTo(Trainer::class);
+        return $this->belongsTo(Trainer::class, 'id_trainer');
     }
     public function apprentice(): BelongsTo
     {
-        return $this->belongsTo(Apprentice::class);
+        return $this->belongsTo(Apprentice::class, 'id_apprentice');
     }
 
     public function scopeIncluded(Builder $query): void

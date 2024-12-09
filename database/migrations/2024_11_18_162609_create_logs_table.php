@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description');
             $table->date('date');
             $table->string('observation');
+            $table->enum('state', ['approved', 'refused', 'pending'])->default('pending');
             $table->foreignId('id_trainer')->references('id')->on('trainers')->onDelete('cascade');
             $table->foreignId('id_apprentice')->references('id')->on('apprentices')->onDelete('cascade');
             $table->timestamps();
