@@ -57,6 +57,7 @@ Route::group([
     Route::delete('delete_visit/{id}', [TrainerController::class, 'deleteVisit']);
 
     Route::get('get_logs_by_apprentice/{id}', [LogController::class, 'getLogsByApprentice']);
+    Route::put('update_logs_by_ids', [LogController::class, 'updateLogsByIds']);
 });
 
 Route::apiResource('logs', LogController::class);

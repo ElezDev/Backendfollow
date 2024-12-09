@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
-  /**
+    /**
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
@@ -68,7 +68,7 @@ class LogController extends Controller
     {
         // Validación de los datos de entrada
         $request->validate([
-           'number_log' => 'required|integer',
+            'number_log' => 'required|integer',
             'description' => 'required|string|max:255',
             'date' => 'required|date',
             'observation' => 'required|string|max:255',
@@ -99,12 +99,25 @@ class LogController extends Controller
 
     public function getLogsByApprentice(string|int $id): JsonResponse
     {
-        
-        $logs = Log::whereHas('apprentice', function ($query) use ($id) {
+
+        $logs = Log::with('apprentice')->whereHas('apprentice', function ($query) use ($id) {
             $query->where('user_id', $id);
         })->get();
 
         return response()->json($logs);
     }
-}
 
+    public function updateLogsByIds(Request $request): JsonResponse
+    {
+        $idsLogs = $request->idsLogs;
+        $date    = $request->date;
+        $state   = $request->state;
+
+        $logsUpdated = Log::whereIn('id', $idsLogs)->update([
+            'date'  => $date,
+            'state' => $state,
+        ]);
+
+        return response()->json($logsUpdated);
+    }
+}
