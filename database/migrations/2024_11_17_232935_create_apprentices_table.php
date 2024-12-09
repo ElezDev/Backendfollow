@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('id_contract')->references('id')->on('contracts');
             $table->foreignId('id_trainer')->references('id')->on('trainers');
+            $table->enum('estado', ['activo', 'novedad', 'finalizada'])->default('activo');
             $table->timestamps();
         });
     }
