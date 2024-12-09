@@ -58,6 +58,8 @@ Route::group([
 
     Route::get('get_logs_by_apprentice/{id}', [LogController::class, 'getLogsByApprentice']);
     Route::put('update_logs_by_ids', [LogController::class, 'updateLogsByIds']);
+
+    Route::get('get_all_follow_ups_by_instructor', [TrainerController::class, 'getAllVisitsByInstructor']);
 });
 
 Route::apiResource('logs', LogController::class);
