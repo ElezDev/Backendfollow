@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -94,5 +95,58 @@ class AuthController extends Controller
             'token_type'   => 'bearer',
             'user'         => $user
         ]);
+    }
+
+    /**
+     * Check email to send user
+     *
+     * @return JsonResponse
+     */
+    public function verifiedEmail(Request $request): JsonResponse
+    {
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            $user->update(['code_verified' => uniqid()]);
+            Mail::to($request->email)->send();
+            return response()->json(['message' => 200]);
+        } else {
+            return response()->json(['message' => 403]);
+        }
+    }
+
+    /**
+     * Check code to change password
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function verifiedCode(Request $request): JsonResponse
+    {
+
+        $user = User::where('code_verified', $request->code)->first();
+
+        if ($user) {
+            return response()->json(['message' => 200]); // If code is equal to code_verified return 200 OK
+        } else {
+            return response()->json(['message' => 403]);
+        }
+    }
+
+    /**
+     * Change password to user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function newPassword(Request $request): JsonResponse
+    {
+        $user = User::where('code_verified', $request->code)->first();
+        $user->update([
+            'password'      => bcrypt($request->newPassword),
+            'code_verified' => NULL
+        ]);
+        return response()->json(['message' => 200]);
     }
 }
