@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Log;
 
 
 class ApprenticeController extends Controller
@@ -146,6 +147,19 @@ class ApprenticeController extends Controller
                 'id_trainer' => $request->id_trainer,
                 'modalidad' => $request->modalidad,
             ]);
+
+            foreach (range(1, 12) as $key) {
+                Log::create([
+                    'number_log'    => $key,
+                    'description'   => 'description',
+                    'date'          => now(),
+                    'observation'   => 'observation',
+                    'id_trainer'    => $request->id_trainer,
+                    'id_apprentice' => $apprentice->id,
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]);
+            }
     
             // Obtener el usuario autenticado
             $authUser = auth('api')->user();
@@ -159,6 +173,9 @@ class ApprenticeController extends Controller
                 'user_id' => $user->id,
                 'sender_id' => $authUser->id,
             ]);
+
+
+
     
             // Notificación al trainer
             $trainer = User::find($request->id_trainer);
