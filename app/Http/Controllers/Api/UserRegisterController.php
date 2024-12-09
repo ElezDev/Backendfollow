@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class UserRegisterController extends Controller
@@ -229,6 +230,30 @@ class UserRegisterController extends Controller
     }
 }
 
-    
+
+public function storePhotoProfile(Request $request)
+{
+    $request->validate([
+        'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $authUser = auth('api')->user();  
+    if ($authUser) {
+        if ($request->hasFile('profile_photo')) {
+            $imagen = $request->file('profile_photo');
+            $rutaAlmacenamiento = $imagen->store('images/profile', 'public');
+            $rutaImagenGuardada = Storage::url($rutaAlmacenamiento);
+            $authUser->update(['urlImagen' => $rutaImagenGuardada]);
+        }
+
+        return response()->json($authUser, 200);
+    }
+
+    return response()->json(['error' => 'No authenticated user'], 401);
+}
+
+
+
+
     
 }

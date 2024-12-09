@@ -81,6 +81,7 @@ Route::group([
     Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
     Route::get('/notification_by_person', [NotificationController::class, 'obtenerNotificacionesUsuario']);
     Route::get('/get_user_data', [UserRegisterController::class, 'obtenerUsuarioAutenticado']);
+    Route::post('/store_profile_photo', [UserRegisterController::class, 'storePhotoProfile']);
 
 });
 

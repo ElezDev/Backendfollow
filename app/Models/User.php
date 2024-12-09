@@ -16,7 +16,19 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+    protected $appends = ['urlImagen'];
 
+
+
+    public function getUrlImagenAttribute()
+{
+    if (
+        isset($this->attributes['urlImagen']) &&
+        isset($this->attributes['urlImagen'][0])
+    ) {
+        return url($this->attributes['urlImagen']);
+    }
+}
     /**
      * The attributes that are mass assignable.
      *
