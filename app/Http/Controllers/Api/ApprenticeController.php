@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Mail\TrainerNotificationMail;
 use App\Mail\VerifiedMail;
 use App\Models\Apprentice;
 use App\Models\Contract;
@@ -156,11 +155,8 @@ class ApprenticeController extends Controller
                 'sender_id' => $authUser->id,
             ]);
 
-            Mail::to($request->email)->queue(new VerifiedMail($user));
-
-                $trainer = User::findOrFail($request->id_trainer);
-                Mail::to($trainer->email)->queue(new TrainerNotificationMail($trainer, $user));
-
+            Mail::to(request()->email)->queue(new VerifiedMail($user));
+        
             DB::commit();
             return response()->json(['message' => 'Aprendiz registrado exitosamente.'], 201);
         } catch (\Exception $e) {

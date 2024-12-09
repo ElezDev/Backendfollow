@@ -4,28 +4,55 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class TrainerNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $trainer;
-    public $apprentice;
+    public $trainerName;
+    public $apprenticeName;
 
-    public function __construct($trainer, $apprentice)
+    /**
+     * Create a new message instance.
+     */
+    public function __construct($trainerName, $apprenticeName)
     {
-        $this->trainer = $trainer;
-        $this->apprentice = $apprentice;
+        $this->trainerName = $trainerName;
+        $this->apprenticeName = $apprenticeName;
     }
 
-    public function build()
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
     {
-        return $this->view('mail.assignedtraine')
-                    ->subject('Nuevo aprendiz asignado')
-                    ->with([
-                        'trainerName' => $this->trainer->name,
-                        'apprenticeName' => "{$this->apprentice->name} {$this->apprentice->last_name}",
-                    ]);
+        return new Envelope(
+            subject: 'Nuevo aprendiz asignado'
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'mail.trainerNotification',
+            with: [
+                'trainerName' => $this->trainerName,
+                'apprenticeName' => $this->apprenticeName,
+            ]
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }
