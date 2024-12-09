@@ -8,6 +8,7 @@ use App\Models\Apprentice;
 use App\Models\Contract;
 use App\Models\Followup;
 use App\Models\Notification;
+use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -176,18 +177,21 @@ class ApprenticeController extends Controller
 
 
 
-    
-            // Notificación al trainer
-            $trainer = User::find($request->id_trainer);
+            $trainer = Trainer::where('id', $request->id_trainer)->first();
+
             if ($trainer) {
-                $messageToTrainer = "Se te ha asignado un nuevo aprendiz: {$user->name} {$user->last_name}.";
-                Notification::create([
-                    'shipping_date' => now(),
-                    'content' => 'Nuevo aprendiz asignado',
-                    'message' => $messageToTrainer,
-                    'user_id' => $trainer->id,
-                    'sender_id' => $authUser->id,
-                ]);
+                $trainerUser = User::find($trainer->user_id);
+            
+                if ($trainerUser) {
+                    $messageToTrainer = "Se te ha asignado un nuevo aprendiz: {$user->name} {$user->last_name}.";
+                    Notification::create([
+                        'shipping_date' => now(),
+                        'content' => 'Nuevo aprendiz asignado',
+                        'message' => $messageToTrainer,
+                        'user_id' => $trainerUser->id,  
+                        'sender_id' => $authUser->id,
+                    ]);
+                }
             }
     
             // Enviar correo al aprendiz
