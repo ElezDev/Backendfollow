@@ -241,12 +241,13 @@ class ApprenticeController extends Controller
         return response()->json($apprenticesByModalidad);
     }
 
-    public function getAllFollowUpsByApprentice(): JsonResponse
+    public function getAllFollowUpsByApprentice(Request $request): JsonResponse
     {
         $user = auth('api')->user();
+        $user_id = $request->id_apprentice ?? $user->id;
 
-        $followUps = Followup::whereHas('trainer.apprentices', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
+        $followUps = Followup::whereHas('trainer.apprentices', function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
         })->get();
 
         return response()->json($followUps);
