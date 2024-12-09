@@ -7,7 +7,6 @@ use App\Mail\VerifiedMail;
 use App\Models\Apprentice;
 use App\Models\Contract;
 use App\Models\Followup;
-use App\Models\Log;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -114,6 +113,7 @@ class ApprenticeController extends Controller
     {
         DB::beginTransaction();
         try {
+            // Crear usuario
             $user = User::create([
                 'identification' => $request->identification,
                 'name' => $request->name,
@@ -126,7 +126,8 @@ class ApprenticeController extends Controller
                 'password' => bcrypt('sena@2024'),
                 'id_role' => 4,
             ]);
-
+    
+            // Crear contrato
             $contract = Contract::create([
                 'code' => rand(1000, 9999),
                 'type' => 'default',
@@ -134,7 +135,8 @@ class ApprenticeController extends Controller
                 'end_date' => now()->addYear(),
                 'id_company' => $request->id_company,
             ]);
-
+    
+            // Crear aprendiz
             $apprentice = Apprentice::create([
                 'academic_level' => $request->academic_level,
                 'program' => $request->program,
@@ -144,33 +146,36 @@ class ApprenticeController extends Controller
                 'id_trainer' => $request->id_trainer,
                 'modalidad' => $request->modalidad,
             ]);
-
+    
+            // Obtener el usuario autenticado
             $authUser = auth('api')->user();
-            $message = "Has sido registrado exitosamente como aprendiz. Bienvenido(a), {$user->name} {$user->last_name}.";
-
+    
+            // Notificación al aprendiz
+            $messageToApprentice = "Has sido registrado exitosamente como aprendiz. Bienvenido(a), {$user->name} {$user->last_name}.";
             Notification::create([
                 'shipping_date' => now(),
                 'content' => 'Registro completado',
-                'message' => $message,
+                'message' => $messageToApprentice,
                 'user_id' => $user->id,
                 'sender_id' => $authUser->id,
             ]);
-
-            foreach (range(1, 12) as $key) {
-                Log::create([
-                    'number_log'    => $key,
-                    'description'   => 'description',
-                    'date'          => now(),
-                    'observation'   => 'observation',
-                    'id_trainer'    => $request->id_trainer,
-                    'id_apprentice' => $apprentice->id,
-                    'created_at'    => now(),
-                    'updated_at'    => now(),
+    
+            // Notificación al trainer
+            $trainer = User::find($request->id_trainer);
+            if ($trainer) {
+                $messageToTrainer = "Se te ha asignado un nuevo aprendiz: {$user->name} {$user->last_name}.";
+                Notification::create([
+                    'shipping_date' => now(),
+                    'content' => 'Nuevo aprendiz asignado',
+                    'message' => $messageToTrainer,
+                    'user_id' => $trainer->id,
+                    'sender_id' => $authUser->id,
                 ]);
             }
-
+    
+            // Enviar correo al aprendiz
             Mail::to(request()->email)->queue(new VerifiedMail($user));
-        
+    
             DB::commit();
             return response()->json(['message' => 'Aprendiz registrado exitosamente.'], 201);
         } catch (\Exception $e) {
@@ -178,7 +183,7 @@ class ApprenticeController extends Controller
             return response()->json(['error' => 'Ocurrió un error al registrar el aprendiz: ' . $e->getMessage()], 500);
         }
     }
-
+    
     /**
      * Get last trainer assigned to apprentice
      * @return \Illuminate\Http\JsonResponse

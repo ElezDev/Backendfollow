@@ -47,6 +47,7 @@ class TrainerNotificationMail extends Mailable
             ]
         );
     }
+    
 
     /**
      * Get the attachments for the message.
