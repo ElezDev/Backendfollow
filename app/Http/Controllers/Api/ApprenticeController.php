@@ -234,4 +234,20 @@ class ApprenticeController extends Controller
 
         return response()->json($followUps);
     }
+
+    public function updateEstado(Request $request, $user_id)
+    {
+        $validated = $request->validate([
+            'estado' => 'required|in:activo,novedad,finalizada',
+        ]);
+        $apprentice = Apprentice::where('user_id', $user_id)->first();
+
+        if (!$apprentice) {
+            return response()->json(['error' => 'Apprentice not found'], 404);
+        }
+        $apprentice->estado = $validated['estado'];
+        $apprentice->save();
+
+        return response()->json(['message' => 'Estado actualizado correctamente'], 200);
+    }
 }
