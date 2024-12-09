@@ -95,6 +95,7 @@
         <div class="content">
             <p>Hola <strong>{{ $user->name }} {{ $user->last_name }}</strong>,</p>
             <p>Haz solicitado el cambio de contraseña</p>
+            <p style="font-size: 20px"><strong>{{ $user->code_verified }}</strong></p>
             <p>Copia y pega el código para restablecer tu contraseña</p>
         </div>
         <div class="footer">
