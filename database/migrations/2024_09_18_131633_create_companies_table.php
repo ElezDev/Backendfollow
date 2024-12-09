@@ -30,6 +30,14 @@ return new class extends Migration
             'social_reason'=> 'hvbjhb',
             'telephone'=> 12312,
         ]);
+        DB::table('companies')->insert([
+            'nit'=> '8999',
+            'name'=> 'SENA',
+            'email'=> 'sena@gmail.com',
+            'address'=> 'Popayan',
+            'social_reason'=> 'Servicio Nacional de Aprendizaje',
+            'telephone'=> 12312,
+        ]);
     }
 
     /**
