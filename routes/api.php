@@ -47,6 +47,7 @@ Route::group([
     Route::get('get_trainer_assigned_by_apprentice', [ApprenticeController::class, 'getTrainerByApprentice']);
     Route::get('get_apprentices_by_instructor', [TrainerController::class, 'getApprenticesByTrainner']);
     Route::get('get_apprentice_by_user_id/{id}', [ApprenticeController::class, 'getUserApprenticeById']);
+    Route::get('get_logs_apprentice', [ApprenticeController::class, 'getLogByAprentice']);
     Route::post('create_notification', [TrainerController::class, 'createNotification']);
     Route::get('get_received_notifications_by_user', [NotificationController::class, 'getReceivedNotifications']);
     Route::get('get_notifications_send_by_user', [NotificationController::class, 'getNotificationsSend']);

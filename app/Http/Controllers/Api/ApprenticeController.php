@@ -268,4 +268,15 @@ class ApprenticeController extends Controller
 
         return response()->json(['message' => 'Estado actualizado correctamente'], 200);
     }
+
+    public function getLogByAprentice(): JsonResponse
+    {
+        $user = auth('api')->user();
+
+        $logs = Log::with('apprentice')->whereHas('apprentice', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
+        return response()->json($logs);
+    }
 }
