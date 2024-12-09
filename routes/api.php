@@ -29,6 +29,9 @@ use App\Http\Controllers\Api\UserRegisterController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->get('/user', [AuthController::class, 'getUser']);
+Route::post('verified_email', [AuthController::class, 'verifiedEmail']);
+Route::post('verified_code', [AuthController::class, 'verifiedCode']);
+Route::post('new_password', [AuthController::class, 'newPassword']);
 
 // Rutas para apprentice
 Route::get('apprentices', [ApprenticeController::class, 'index'])->name('api.apprentices.index');
@@ -81,7 +84,6 @@ Route::group([
     Route::post('/apprentices-asignar', [ApprenticeController::class, 'asignarInstructorAprendiz']);
     Route::get('/notification_by_person', [NotificationController::class, 'obtenerNotificacionesUsuario']);
     Route::get('/get_user_data', [UserRegisterController::class, 'obtenerUsuarioAutenticado']);
-
 });
 
 Route::get('getCompany', action: [CompanyController::class, 'getCompany']);
@@ -94,4 +96,3 @@ Route::get('apprentices_by_modalidad', [ApprenticeController::class, 'getApprent
 
 Route::put('update_user/{id}', [UserRegisterController::class, 'updateUser']);
 Route::delete('delete_user/{id}', [UserRegisterController::class, 'eliminarUser']);
-
