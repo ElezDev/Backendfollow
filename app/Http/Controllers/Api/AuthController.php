@@ -129,9 +129,9 @@ class AuthController extends Controller
         $user = User::where('code_verified', $request->code)->first();
 
         if ($user) {
-            return response()->json(['message' => 200]); // If code is equal to code_verified return 200 OK
+            return response()->json(['message' => 200], 200); // If code is equal to code_verified return 200 OK
         } else {
-            return response()->json(['message' => 403]);
+            return response()->json(['message' => 403], 403);
         }
     }
 
