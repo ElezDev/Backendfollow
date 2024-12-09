@@ -114,7 +114,7 @@ class LogController extends Controller
         $state   = $request->state;
 
         $logsUpdated = Log::whereIn('id', $idsLogs)->update([
-            'date'  => $date,
+            'date'  => $date ?? now(),
             'state' => $state,
         ]);
 
