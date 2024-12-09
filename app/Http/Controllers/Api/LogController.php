@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Log;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LogController extends Controller
@@ -16,18 +17,7 @@ class LogController extends Controller
      */
     public function index(Request $request)
     {
-        // Recupera todos los contratos
-        $logs = Log::query();
-
-        // Verifica si el parámetro 'included' está presente y tiene el valor 'Company'
-        if ($request->query('included') === 'Trainer') {
-            $logs->with('trainer'); // Carga la relación con la compañía
-        }
-        if ($request->query('included') === 'Apprentice') {
-            $logs->with('apprentice'); // Carga la relación con la compañía
-        }
-
-        return response()->json($logs->get());
+        return response()->json();
     }
 
     /**
@@ -46,8 +36,6 @@ class LogController extends Controller
             'observation' => 'required|string|max:255',
             'id_trainer' => 'required|exists:trainers,id',
             'id_apprentice' => 'required|exists:apprentices,id',
-
-            
         ]);
 
         // Creación del nuevo contrato
@@ -64,7 +52,6 @@ class LogController extends Controller
      */
     public function show($id)
     {
-        // Recupera un contrato específico
         $log = Log::findOrFail($id);
 
         return response()->json($log);
@@ -107,6 +94,17 @@ class LogController extends Controller
         $log->delete();
 
         return response()->json(null, 204); // Respuesta vacía con código 204
+    }
+
+
+    public function getLogsByApprentice(string|int $id): JsonResponse
+    {
+        
+        $logs = Log::whereHas('apprentice', function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->get();
+
+        return response()->json($logs);
     }
 }
 

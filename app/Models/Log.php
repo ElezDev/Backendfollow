@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Log extends Model
 {
     use HasFactory;
-    public function Trainer(){
-        return $this->belongsTo('App\Models\Trainer');
-    }
-    public function Apprentice(){
-        return $this->belongsTo('App\Models\Apprentice');
-    }
-    protected $fillable = [
+
+    protected $guarded = ['id'];
+
+    protected $allowIncluded = [
+        'trainer',
+        'apprentice'
+    ];
+
+    protected $allowFilter = [
+        'id',
         'number_log',
         'description',
         'date',
@@ -24,23 +28,26 @@ class Log extends Model
         'id_apprentice'
     ];
 
-    protected $allowIncluded = ['Trainer','Apprentice'];
-
-    protected $allowFilter = ['id', 'number_log',
+    protected $allowSort = [
+        'id',
+        'number_log',
         'description',
         'date',
         'observation',
         'id_trainer',
-        'id_apprentice'];
+        'id_apprentice'
+    ];
 
-    protected $allowSort = ['id','number_log',
-        'description',
-        'date',
-        'observation',
-        'id_trainer',
-        'id_apprentice'];
+    public function trainer(): BelongsTo
+    {
+        return $this->belongsTo(Trainer::class, 'id_trainer');
+    }
+    public function apprentice(): BelongsTo
+    {
+        return $this->belongsTo(Apprentice::class, 'id_apprentice');
+    }
 
-    public function scopeIncluded(Builder $query)
+    public function scopeIncluded(Builder $query): void
     {
         if (empty($this->allowIncluded) || empty(request('included'))) {
             return;
@@ -58,7 +65,7 @@ class Log extends Model
         $query->with($relations);
     }
 
-    public function scopeFilter(Builder $query)
+    public function scopeFilter(Builder $query): void
     {
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
@@ -74,7 +81,7 @@ class Log extends Model
         }
     }
 
-    public function scopeSort(Builder $query)
+    public function scopeSort(Builder $query): void
     {
         if (empty($this->allowSort) || empty(request('sort'))) {
             return;
@@ -97,4 +104,3 @@ class Log extends Model
         }
     }
 }
-

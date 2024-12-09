@@ -7,6 +7,7 @@ use App\Mail\VerifiedMail;
 use App\Models\Apprentice;
 use App\Models\Contract;
 use App\Models\Followup;
+use App\Models\Log;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -134,7 +135,7 @@ class ApprenticeController extends Controller
                 'id_company' => $request->id_company,
             ]);
 
-            Apprentice::create([
+            $apprentice = Apprentice::create([
                 'academic_level' => $request->academic_level,
                 'program' => $request->program,
                 'ficha' => $request->ficha,
@@ -154,6 +155,19 @@ class ApprenticeController extends Controller
                 'user_id' => $user->id,
                 'sender_id' => $authUser->id,
             ]);
+
+            foreach (range(1, 12) as $key) {
+                Log::create([
+                    'number_log'    => $key,
+                    'description'   => 'description',
+                    'date'          => now(),
+                    'observation'   => 'observation',
+                    'id_trainer'    => $request->id_trainer,
+                    'id_apprentice' => $apprentice->id,
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]);
+            }
 
             Mail::to(request()->email)->queue(new VerifiedMail($user));
         
